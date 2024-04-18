@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { MikroORM, EntityManager } from '@mikro-orm/core';
 import { UserInstance, UserModel } from './user.entity';
+import { AuthModel } from './auth.entity';
 import * as argon from 'argon2';
 
 const responseHandler = require('../helpers/responseHandler');
@@ -11,7 +12,7 @@ export class UserService {
     private readonly orm: MikroORM,
     private readonly em: EntityManager,
   ) {}
-  async login(req: UserInstance) {
+  async login(req) {
     try {
       const user = await this.orm.em.findOne(UserModel, {
         email: req.email,
@@ -37,8 +38,17 @@ export class UserService {
         age: user.age,
         no_telephone: user.no_telephone,
         token: user.password,
+        status: user.status,
       };
-      // delete user.password;
+
+      const InsertToAuth = await this.orm.em.create(AuthModel, {
+        id_user: user.id,
+        uid: req.uid,
+        token: user.password,
+        role: user.role,
+      });
+
+      await this.orm.em.persistAndFlush(InsertToAuth);
 
       return responseHandler.succes(`success`, mydatas, 200);
     } catch (error) {
@@ -64,6 +74,7 @@ export class UserService {
         age: req.age,
         no_telephone: req.no_telephone,
         role: req.role,
+        status: 'ACTIVE',
       });
 
       await this.orm.em.persistAndFlush(CreateUsers);

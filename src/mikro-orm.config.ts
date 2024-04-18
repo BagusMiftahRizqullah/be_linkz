@@ -3,6 +3,7 @@ import { TsMorphMetadataProvider } from '@mikro-orm/reflection';
 import { PostgreSqlDriver } from '@mikro-orm/postgresql';
 import { TSMigrationGenerator } from '@mikro-orm/migrations';
 import { UserModel } from './user/user.entity';
+import { AuthModel } from './user/auth.entity';
 import { Migrator } from '@mikro-orm/migrations';
 import { EntityGenerator } from '@mikro-orm/entity-generator';
 import { SeedManager } from '@mikro-orm/seeder';
@@ -19,7 +20,7 @@ export default {
     console.log(message);
   },
   getDriver: PostgreSqlDriver,
-  entities: [UserModel],
+  entities: [UserModel, AuthModel],
   migrations: {
     tableName: 'mikro_orm_migrations',
     path: __dirname + '/migrations',

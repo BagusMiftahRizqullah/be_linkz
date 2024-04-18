@@ -1,5 +1,4 @@
 import { EntitySchema } from '@mikro-orm/core';
-import { nanoid } from 'nanoid';
 
 export interface BaseAttributes {
   id: number;
@@ -24,6 +23,7 @@ export interface UserInstance extends BaseAttributes {
   age: number;
   no_telephone: number;
   role: string;
+  status: string;
 }
 
 export const UserModel = new EntitySchema<UserInstance>({
@@ -37,5 +37,6 @@ export const UserModel = new EntitySchema<UserInstance>({
     age: { type: 'number', nullable: true },
     no_telephone: { type: 'string', nullable: true },
     role: { type: 'string', nullable: true },
+    status: { type: 'string', nullable: true },
   },
 });
