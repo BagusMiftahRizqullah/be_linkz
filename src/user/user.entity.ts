@@ -23,7 +23,7 @@ export interface UserInstance extends BaseAttributes {
   password: string;
   age: number;
   no_telephone: number;
-  token: string;
+  role: string;
 }
 
 export const UserModel = new EntitySchema<UserInstance>({
@@ -35,7 +35,7 @@ export const UserModel = new EntitySchema<UserInstance>({
     email: { type: 'string', unique: true, nullable: true, length: 255 },
     password: { type: 'string' },
     age: { type: 'number', nullable: true },
-    no_telephone: { type: 'number', nullable: true },
-    token: { type: 'string', nullable: true, length: 255 },
+    no_telephone: { type: 'string', nullable: true },
+    role: { type: 'string', nullable: true },
   },
 });

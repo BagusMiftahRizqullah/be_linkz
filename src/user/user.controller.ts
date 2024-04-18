@@ -1,18 +1,18 @@
 import { Body, Controller, Post } from '@nestjs/common';
 import { UserService } from './user.service';
-import { signupInterface, signinInterface } from './interface';
+import { UserInstance } from './user.entity';
 
 @Controller('user')
 export class UserController {
-  constructor(private authService: UserService) {}
-
-  @Post('signup')
-  signup(@Body() req: signupInterface) {
-    return 'IAM SIGNUP BROO!';
-  }
+  constructor(private service: UserService) {}
 
   @Post('signin')
-  signin(@Body() req: signinInterface) {
-    return 'IAM SIGNIN BROO!';
+  signin(@Body() req: UserInstance) {
+    return this.service.login(req);
+  }
+
+  @Post('signup')
+  signup(@Body() req: UserInstance) {
+    return this.service.signup(req);
   }
 }
