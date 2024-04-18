@@ -1,4 +1,4 @@
-import { Body, Controller, Post } from '@nestjs/common';
+import { Body, Controller, Get, Post } from '@nestjs/common';
 import { UserService } from './user.service';
 import { UserInstance } from './user.entity';
 
@@ -14,5 +14,10 @@ export class UserController {
   @Post('signup')
   signup(@Body() req: UserInstance) {
     return this.service.signup(req);
+  }
+
+  @Get('auth')
+  auth() {
+    return this.service.GetAuth();
   }
 }

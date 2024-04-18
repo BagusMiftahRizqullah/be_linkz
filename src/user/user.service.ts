@@ -84,4 +84,16 @@ export class UserService {
       return responseHandler.error(`Server Error`, 500);
     }
   }
+
+  async GetAuth() {
+    try {
+      const dataAuth = await this.orm.em.findAll(AuthModel);
+
+      console.log('dataAuth', dataAuth);
+
+      return responseHandler.succes(`success`, dataAuth, 200);
+    } catch (error) {
+      return responseHandler.error(`Server Error`, 500);
+    }
+  }
 }
