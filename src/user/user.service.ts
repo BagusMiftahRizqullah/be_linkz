@@ -63,6 +63,7 @@ export class UserService {
         password: password,
         age: req.age,
         no_telephone: req.no_telephone,
+        role: req.role,
       });
 
       await this.orm.em.persistAndFlush(CreateUsers);
