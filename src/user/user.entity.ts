@@ -24,6 +24,7 @@ export interface UserInstance extends BaseAttributes {
   no_telephone: number;
   role: string;
   status: string;
+  deleted_at: Date;
 }
 
 export const UserModel = new EntitySchema<UserInstance>({
@@ -38,5 +39,6 @@ export const UserModel = new EntitySchema<UserInstance>({
     no_telephone: { type: 'string', nullable: true },
     role: { type: 'string', nullable: true },
     status: { type: 'string', nullable: true },
+    deleted_at: { type: 'date', nullable: true },
   },
 });

@@ -78,8 +78,8 @@
           "nullable": false,
           "mappedType": "date"
         },
-        "softdelete": {
-          "name": "softdelete",
+        "deleted_at": {
+          "name": "deleted_at",
           "type": "date",
           "unsigned": false,
           "autoincrement": false,
@@ -199,6 +199,15 @@
           "primary": false,
           "nullable": true,
           "mappedType": "string"
+        },
+        "deleted_at": {
+          "name": "deleted_at",
+          "type": "date",
+          "unsigned": false,
+          "autoincrement": false,
+          "primary": false,
+          "nullable": true,
+          "mappedType": "date"
         }
       },
       "name": "users",

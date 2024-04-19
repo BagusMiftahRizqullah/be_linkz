@@ -1,8 +1,9 @@
 import { Injectable } from '@nestjs/common';
-import { MikroORM, EntityManager } from '@mikro-orm/core';
+import { MikroORM, EntityManager, wrap } from '@mikro-orm/core';
 import { UserInstance, UserModel } from './user.entity';
 import { AuthModel } from './auth.entity';
 import * as argon from 'argon2';
+const moment = require('moment');
 
 const responseHandler = require('../helpers/responseHandler');
 
@@ -21,6 +22,15 @@ export class UserService {
       if (!user)
         return responseHandler.error(
           `Your email and password do not match. Please try again`,
+          400,
+        );
+
+      const userActived = await this.orm.em.findOne(UserModel, {
+        status: 'ACTIVE',
+      });
+      if (!userActived)
+        return responseHandler.error(
+          `Your Account is not Active. Please Contact Admin`,
           400,
         );
 
@@ -89,9 +99,47 @@ export class UserService {
     try {
       const dataAuth = await this.orm.em.findAll(AuthModel);
 
-      console.log('dataAuth', dataAuth);
-
       return responseHandler.succes(`success`, dataAuth, 200);
+    } catch (error) {
+      return responseHandler.error(`Server Error`, 500);
+    }
+  }
+
+  async DellUser(req) {
+    console.log('DELLREQ', req);
+    const dateNow = moment().format('YYYY-MM-DDThh:mm:ss.ms');
+    try {
+      const userActived = await this.orm.em.findOne(UserModel, {
+        status: 'ACTIVE',
+      });
+
+      if (!userActived)
+        return responseHandler.error(
+          `Your Account is not Active. Please Contact Admin`,
+          400,
+        );
+
+      const idDell = await this.orm.em.findOne(UserModel, req);
+
+      console.log('DELLREQ2', idDell, dateNow);
+
+      const newUser = await wrap(idDell).assign({
+        status: 'NONACTIVE',
+        deleted_at: `${dateNow}` || dateNow,
+      });
+
+      const InsertToAuth = await this.orm.em.create(AuthModel, {
+        id_user: idDell.id,
+        uid: `UID${Math.random()}`,
+        token: idDell.password,
+        role: idDell.role,
+        deleted_at: `${dateNow}` || dateNow,
+      });
+
+      await this.orm.em.persistAndFlush(InsertToAuth);
+      await this.orm.em.persistAndFlush(newUser);
+
+      return responseHandler.succes(`success`, newUser, 200);
     } catch (error) {
       return responseHandler.error(`Server Error`, 500);
     }

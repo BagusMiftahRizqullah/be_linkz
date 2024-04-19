@@ -22,7 +22,7 @@ export interface AuthInstance extends BaseAttributes {
   token: string;
   role: string;
   latestLogin: Date;
-  softdelete: Date;
+  deleted_at: Date;
 }
 
 export const AuthModel = new EntitySchema<AuthInstance>({
@@ -38,7 +38,7 @@ export const AuthModel = new EntitySchema<AuthInstance>({
       type: 'date',
       onCreate: () => new Date(),
     },
-    softdelete: {
+    deleted_at: {
       type: 'date',
       nullable: true,
     },
